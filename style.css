@@ -117,23 +117,34 @@ footer p {
 /* =====================
    Стилі рулетки та анімацій
    ===================== */
-/* Контейнер рулетки: збільшено розмір, щоб все було по центру */
+/* Контейнер рулетки: збільшено розмір, щоб елементи були по центру */
 #rouletteContainer {
   overflow: hidden;
   border: 2px solid #00ffcc;
   margin: 20px auto;
-  width: 750px;      /* Збільшена ширина контейнера */
-  height: 250px;     /* Збільшена висота контейнера */
+  width: 750px;      /* Залишається ширина контейнера, що показує 3 зображення */
+  height: 250px;     /* Збільшена висота */
   position: relative;
 }
 
-/* Трек рулетки: зображення розташовано в один ряд */
+/* Трек рулетки: ми будемо використовувати дві копії скінів для безперервного руху */
 #rouletteTrack {
   display: flex;
-  transition: transform 3s ease-out;
+  /* Початкове положення буде встановлено через JS */
 }
 
-/* Змінено розміри зображення рулетки */
+/* Клас для безперервної анімації – ключові кадри обертання по колу */
+#rouletteTrack.spinning {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateX(0); }
+  /* Один цикл – це ширина одного повного набору скінів */
+  to { transform: translateX(-1250px); }  /* 5 скінів * 250 = 1250px */
+}
+
+/* Зображення в треці */
 #rouletteTrack img {
   width: 250px;
   height: 250px;
@@ -169,4 +180,3 @@ footer p {
   animation: dropEffect 1s ease-out forwards;
   z-index: 101;
 }
-
