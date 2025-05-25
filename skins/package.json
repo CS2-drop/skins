@@ -1,0 +1,9 @@
+{
+  "name": "cs2-drop-platform",
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "start": "echo Choose 'npm start' in client and server folders",
+    "install:all": "npm install --workspaces"
+  }
+}
