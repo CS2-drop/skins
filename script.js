@@ -6,11 +6,11 @@ const loops = 5;        // Кількість повних циклів руле
 
 // Масиви скінів для кожного кейсу
 const case1Skins = [
-  { name: "Кейс 1 - Скін A", image: "images/skins/SkinA1.jpg" },
-  { name: "Кейс 1 - Скін B", image: "images/skins/SkinA2.jpg" },
-  { name: "Кейс 1 - Скін C", image: "images/skins/SkinA3.jpg" },
-  { name: "Кейс 1 - Скін D", image: "images/skins/SkinA4.jpg" },
-  { name: "Кейс 1 - Скін E", image: "images/skins/SkinA5.jpg" }
+  { name: "Кейс 1 - Скін A", image: "images/skins/Skin_A1.jpg" },
+  { name: "Кейс 1 - Скін B", image: "images/skins/Skin_A2.jpg" },
+  { name: "Кейс 1 - Скін C", image: "images/skins/Skin_A3.jpg" },
+  { name: "Кейс 1 - Скін D", image: "images/skins/Skin_A4.jpg" },
+  { name: "Кейс 1 - Скін E", image: "images/skins/Skin_A5.jpg" }
 ];
 
 const case2Skins = [
