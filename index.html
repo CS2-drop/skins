@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Онлайн відкриття кейсів з анімацією</title>
+  <title>Онлайн відкриття кейсів</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Підключення зовнішнього CSS -->
   <link rel="stylesheet" href="style.css">
@@ -18,21 +18,21 @@
     <!-- Кейс 1 -->
     <div class="case-section" id="case1">
       <div class="case-title">Кейс 1</div>
-      <img class="case-image" id="case1Image" src="images/cases/case1.png" alt="Кейс 1">
+      <img class="case-image" id="case1Image" src="images/skins/Skin_A1.jpg" alt="Кейс 1">
       <button class="btn" id="openCase1Btn">Відкрити кейс</button>
       <div class="result" id="result1"></div>
     </div>
     <!-- Кейс 2 -->
     <div class="case-section" id="case2">
       <div class="case-title">Кейс 2</div>
-      <img class="case-image" id="case2Image" src="images/cases/case2.jpg" alt="Кейс 2">
+      <img class="case-image" id="case2Image" src="images/skins/Skin_B1.png" alt="Кейс 2">
       <button class="btn" id="openCase2Btn">Відкрити кейс</button>
       <div class="result" id="result2"></div>
     </div>
     <!-- Кейс 3 -->
     <div class="case-section" id="case3">
       <div class="case-title">Кейс 3</div>
-      <img class="case-image" id="case3Image" src="images/cases/case3.png" alt="Кейс 3">
+      <img class="case-image" id="case3Image" src="https://via.placeholder.com/300x300.png?text=Кейс+3+Скін+A" alt="Кейс 3">
       <button class="btn" id="openCase3Btn">Відкрити кейс</button>
       <div class="result" id="result3"></div>
     </div>
@@ -45,6 +45,8 @@
       <h2>Відкриття кейсу...</h2>
       <div id="rouletteContainer">
         <div id="rouletteTrack"></div>
+        <!-- Маркер, який вказує центр (виграшне положення) -->
+        <div id="rouletteMarker"></div>
       </div>
     </div>
   </div>
