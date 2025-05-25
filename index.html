@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Онлайн відкриття кейсів з анімацією</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>Онлайн відкриття кейсів</h1>
+  </header>
+
+  <main>
+    <!-- Кейс 1 -->
+    <div class="case-section" id="case1">
+      <div class="case-title">Кейс 1</div>
+      <img class="case-image" id="case1Image" src="https://via.placeholder.com/300x300.png?text=Кейс+1" alt="Кейс 1">
+      <button class="btn" id="openCase1Btn">Відкрити кейс</button>
+      <div class="result" id="result1"></div>
+    </div>
+
+    <!-- Кейс 2 -->
+    <div class="case-section" id="case2">
+      <div class="case-title">Кейс 2</div>
+      <img class="case-image" id="case2Image" src="https://via.placeholder.com/300x300.png?text=Кейс+2" alt="Кейс 2">
+      <button class="btn" id="openCase2Btn">Відкрити кейс</button>
+      <div class="result" id="result2"></div>
+    </div>
+
+    <!-- Кейс 3 -->
+    <div class="case-section" id="case3">
+      <div class="case-title">Кейс 3</div>
+      <img class="case-image" id="case3Image" src="https://via.placeholder.com/300x300.png?text=Кейс+3" alt="Кейс 3">
+      <button class="btn" id="openCase3Btn">Відкрити кейс</button>
+      <div class="result" id="result3"></div>
+    </div>
+  </main>
+
+  <!-- Модальне вікно -->
+  <div class="modal" id="rouletteModal">
+    <div class="modal-content">
+      <button class="btn exit-btn" id="exitModalBtn">Вихід</button>
+      <h2>Відкриття кейсу...</h2>
+      <div id="rouletteContainer">
+        <div id="rouletteTrack"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Онлайн відкриття кейсів</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
