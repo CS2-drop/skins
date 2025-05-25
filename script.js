@@ -13,7 +13,7 @@ const imageWidth = 250;            // Ширина одного зображен
 const cycleWidth = 5 * imageWidth;   // 1250 px – ширина одного набору скінів
 const continuousSpinTime = 3000;     // Час безперервного обертання (мс)
 const decelerationDuration = 3000;   // Тривалість сповільнення (мс)
-const extraCycles = 2;             // Додатково циклів для ефекту сповільнення
+const extraCycles = 1;             // Додатково циклів для ефекту сповільнення
 
 // Масиви скінів
 const case1Skins = [
@@ -88,7 +88,7 @@ function stopRoulette(track, skins, onStopCallback) {
   
   // Розрахунок бажаного положення:
   // Хочемо, щоб виграшний скін (номер finalIndex) мав лівий край на 250px (центр контейнера)
-  let desiredModulo = finalIndex * imageWidth - 250;
+  let desiredModulo = finalIndex * imageWidth - 500;
   if (desiredModulo < 0) { 
     desiredModulo += cycleWidth;
   }
