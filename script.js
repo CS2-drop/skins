@@ -1,12 +1,13 @@
 /**********************
  * Налаштування та дані *
  **********************/
-const imageWidth = 250;          // Ширина одного зображення (px)
-const cycleWidth = 5 * imageWidth; // Ширина одного набору скінів: 5 * 250 = 1250px
+const imageWidth = 250;          // Ширина одного зображення
+const cycleWidth = 5 * imageWidth; // Ширина 5 скінів (1250px)
 const continuousSpinTime = 3000; // Час безперервного обертання (мс)
 const decelerationDuration = 3000; // Тривалість сповільнення (мс)
+const extraCycles = 2;           // Додатково циклів для ефекту сповільнення
 
-// Масиви скінів для кожного кейсу
+// Масиви скінів
 const case1Skins = [
   { name: "Кейс 1 – Скін A", image: "images/skins/SkinA1.jpg" },
   { name: "Кейс 1 – Скін B", image: "images/skins/SkinA2.jpg" },
@@ -35,58 +36,56 @@ const case3Skins = [
  * Функція: Запуск безперервного обертання рулетки *
  ****************************************************/
 function startContinuousSpin(track, skins) {
-  // Для безперервності створюємо одну копію набору скінів
-  const trackContent = skins.concat(skins);
+  // Заповнюємо трек копіями скінів (6 копій для довжини)
   track.innerHTML = "";
-  trackContent.forEach(skin => {
-    const img = document.createElement("img");
-    img.src = skin.image;
-    img.alt = skin.name;
-    track.appendChild(img);
-  });
-
-  // Початкове положення – 0
-  track.style.transform = "translateX(0px)";
+  for (let i = 0; i < 6; i++) {
+    skins.forEach(skin => {
+      const img = document.createElement("img");
+      img.src = skin.image;
+      img.alt = skin.name;
+      track.appendChild(img);
+    });
+  }
+  // Додаємо клас для CSS безперервного обертання
+  track.classList.add("spinning");
 }
 
 /****************************************************
- * Функція: Зупинка рулетки та розрахунок кінцевої позиції *
+ * Функція: Зупинка рулетки та сповільнення            *
  ****************************************************/
 function stopRoulette(track, skins, onStopCallback) {
-  // Отримуємо поточний зсув (translateX) з computedStyle
+  // Видаляємо клас безперервного обертання
+  track.classList.remove("spinning");
+
+  // Отримуємо поточний зсув з обчисленого стилю
   const computedStyle = window.getComputedStyle(track);
   const matrix = computedStyle.transform || computedStyle.webkitTransform;
   let currentOffset = 0;
   if (matrix && matrix !== "none") {
-    const values = matrix.split('(')[1].split(')')[0].split(',');
+    const values = matrix.match(/matrix.*\((.+)\)/)[1].split(/,\s*/);
     currentOffset = Math.abs(parseFloat(values[4]));
   }
-  
+
   // Обираємо випадковий індекс кінцевого скіну
   const finalIndex = Math.floor(Math.random() * skins.length);
-  // Для того, щоб центральне зображення опинилося по центру контейнера (зліва має бути 250px),
-  // бажаний зсув в межах одного циклу:
+  // Розраховуємо бажане положення так, щоб виграшний скін був по центру (зліва має бути 250px)
   let desiredModulo = finalIndex * imageWidth - 250;
   if (desiredModulo < 0) desiredModulo += cycleWidth;
-  
-  // Поточний залишок від ділення
+
   const remainder = currentOffset % cycleWidth;
-  
-  // Розраховуємо коригування:
   let delta = desiredModulo - remainder;
   if (delta < 0) delta += cycleWidth;
-  
-  // Додаємо повних циклів для ефекту сповільнення (наприклад, 2 цикли)
-  const extra = cycleWidth * 2;
+
+  // Додаємо додаткові цикли для ефекту сповільнення
+  const extra = cycleWidth * extraCycles;
   const finalTotalOffset = currentOffset - remainder + delta + extra;
   
   // Застосовуємо перехід для плавного сповільнення
   track.style.transition = `transform ${decelerationDuration}ms ease-out`;
   track.style.transform = `translateX(-${finalTotalOffset}px)`;
-  
-  // Після завершення переходу викликаємо callback з кінцевим індексом
-  track.addEventListener("transitionend", function handleTransition() {
-    track.removeEventListener("transitionend", handleTransition);
+
+  track.addEventListener("transitionend", function handler() {
+    track.removeEventListener("transitionend", handler);
     onStopCallback(finalIndex);
   });
 }
@@ -98,23 +97,22 @@ function openCaseModal(skins, mainImageId, resultId) {
   const modal = document.getElementById("rouletteModal");
   const track = document.getElementById("rouletteTrack");
 
-  // Показуємо модальне вікно та запускаємо безперервну анімацію
+  // Показуємо модальне вікно та запускаємо безперервне обертання
   modal.style.display = "flex";
   startContinuousSpin(track, skins);
 
-  // Після заданого часу зупиняємо рулетку
+  // Через заданий час зупиняємо рулетку
   setTimeout(() => {
     stopRoulette(track, skins, function(finalIndex) {
-      // Отримуємо обраний скін
       const selectedSkin = skins[finalIndex];
-      // Створюємо ефект "випадання" – додаємо елемент у контейнер рулетки (це гарантує, що він залишається всередині)
+      // Створюємо ефект "випадання" виграшного скіну
       const winningImg = document.createElement("img");
       winningImg.src = selectedSkin.image;
       winningImg.alt = selectedSkin.name;
       winningImg.classList.add("winning-img");
+      // Додаємо ефект безпосередньо у контейнер рулетки, щоб він був усередині вікна
       document.getElementById("rouletteContainer").appendChild(winningImg);
 
-      // Після завершення анімації "випадання" оновлюємо кейс та результат
       winningImg.addEventListener("animationend", function() {
         document.getElementById(mainImageId).src = selectedSkin.image;
         document.getElementById(resultId).textContent = "Ви отримали: " + selectedSkin.name;
