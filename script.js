@@ -17,11 +17,11 @@ const extraCycles = 2;            // Додатково циклів для еф
 
 // Масиви скінів (приклад для кейсу 1; для кейсів 2 і 3 можна покласти свої чи використати placeholder)
 const case1Skins = [
-  { name: "Кейс 1 – Скін A", image: "skins/Skin_A1.jpg" },
-  { name: "Кейс 1 – Скін B", image: "skins/Skin_A2.jpg" },
-  { name: "Кейс 1 – Скін C", image: "skins/Skin_A3.jpg" },
-  { name: "Кейс 1 – Скін D", image: "skins/Skin_A4.jpg" },
-  { name: "Кейс 1 – Скін E", image: "skins/Skin_A5.jpg" }
+  { name: "Кейс 1 – Скін A", image: "imagesskins/Skin_A1.jpg" },
+  { name: "Кейс 1 – Скін B", image: "imagesskins/Skin_A2.jpg" },
+  { name: "Кейс 1 – Скін C", image: "imagesskins/Skin_A3.jpg" },
+  { name: "Кейс 1 – Скін D", image: "imagesskins/Skin_A4.jpg" },
+  { name: "Кейс 1 – Скін E", image: "imagesskins/Skin_A5.jpg" }
 ];
 
 const case2Skins = [
