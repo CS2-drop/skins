@@ -1,183 +1,25 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Онлайн открытие кейсов с анимацией</title>
+  <title>Онлайн відкриття кейсів з анімацією</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* =====================
-       Общие стили страницы
-       ===================== */
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    header {
-      background-color: #1a1a1a;
-      padding: 20px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2em;
-    }
-    main {
-      padding: 20px;
-    }
-    footer {
-      background-color: #1a1a1a;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    footer p {
-      margin: 0;
-      font-size: 1em;
-    }
-
-    /* =====================
-       Стили секций кейсов
-       ===================== */
-    .case-section {
-      margin: 20px auto;
-      padding: 10px;
-      width: 320px;
-      background-color: #000;
-      border: 2px solid #00ffcc;
-    }
-    .case-title {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-    }
-    .case-image {
-      width: 300px;
-      height: 300px;
-      object-fit: cover;
-      border: 2px solid #00ffcc;
-    }
-    .btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #00ffcc;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #00e6b8;
-    }
-    .result {
-      margin-top: 10px;
-      font-size: 1.2em;
-      color: #00ffcc;
-    }
-
-    /* =====================
-       Модальное окно для анимации рулетки
-       ===================== */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal-content {
-      position: relative;
-      background: #222;
-      padding: 20px;
-      border: 2px solid #00ffcc;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 500px;
-    }
-    .exit-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      font-size: 0.9em;
-    }
-
-    /* =====================
-       Стили рулетки и анимаций
-       ===================== */
-    /* Контейнер рулетки показывает несколько скинов (ширина увеличена) */
-    #rouletteContainer {
-      overflow: hidden;
-      border: 2px solid #00ffcc;
-      margin: 20px auto;
-      width: 300px;   /* Теперь видно 2 изображения по 150px (на случай, если они выровнены горизонтально) */
-      height: 150px;
-      position: relative;
-    }
-    /* "Трек" рулетки: изображения размещены в строчку */
-    #rouletteTrack {
-      display: flex;
-      transition: transform 3s ease-out;
-    }
-    #rouletteTrack img {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-right: 1px solid #121212;
-    }
-    /* Анимация "выпадения" выбранного скина */
-    @keyframes dropEffect {
-      0% {
-        transform: scale(0.5) translateY(-20px);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.2) translateY(10px);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
-    }
-    .winning-img {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border: 2px solid #00ffcc;
-      animation: dropEffect 1s ease-out forwards;
-      z-index: 101;
-    }
-  </style>
+  <!-- Підключення зовнішнього CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- =====================
-       Header
-       ===================== -->
+  <!-- Header -->
   <header>
-    <h1>Онлайн открытие кейсов</h1>
+    <h1>Онлайн відкриття кейсів</h1>
   </header>
 
-  <!-- =====================
-       Main Content: Кейсы
-       ===================== -->
+  <!-- Головний контент: Кейси -->
   <main>
     <!-- Кейс 1 -->
     <div class="case-section" id="case1">
       <div class="case-title">Кейс 1</div>
-      <!-- Замените путь к изображению, если файлы у вас локально -->
       <img class="case-image" id="case1Image" src="images/skins/SkinA1.jpg" alt="Кейс 1">
-      <button class="btn" id="openCase1Btn">Открыть кейс</button>
+      <button class="btn" id="openCase1Btn">Відкрити кейс</button>
       <div class="result" id="result1"></div>
     </div>
 
@@ -185,7 +27,7 @@
     <div class="case-section" id="case2">
       <div class="case-title">Кейс 2</div>
       <img class="case-image" id="case2Image" src="https://via.placeholder.com/300x300.png?text=Кейс+2" alt="Кейс 2">
-      <button class="btn" id="openCase2Btn">Открыть кейс</button>
+      <button class="btn" id="openCase2Btn">Відкрити кейс</button>
       <div class="result" id="result2"></div>
     </div>
 
@@ -193,157 +35,28 @@
     <div class="case-section" id="case3">
       <div class="case-title">Кейс 3</div>
       <img class="case-image" id="case3Image" src="https://via.placeholder.com/300x300.png?text=Кейс+3" alt="Кейс 3">
-      <button class="btn" id="openCase3Btn">Открыть кейс</button>
+      <button class="btn" id="openCase3Btn">Відкрити кейс</button>
       <div class="result" id="result3"></div>
     </div>
   </main>
 
-  <!-- =====================
-       Modal Window: Анимация рулетки
-       ===================== -->
+  <!-- Модальне вікно: Анімація рулетки -->
   <div class="modal" id="rouletteModal">
     <div class="modal-content">
-      <button class="btn exit-btn" id="exitModalBtn">Выход</button>
-      <h2>Открытие кейса...</h2>
+      <button class="btn exit-btn" id="exitModalBtn">Вихід</button>
+      <h2>Відкриття кейсу...</h2>
       <div id="rouletteContainer">
         <div id="rouletteTrack"></div>
       </div>
     </div>
   </div>
 
-  <!-- =====================
-       Footer
-       ===================== -->
+  <!-- Footer -->
   <footer>
-    <p>© 2025 Онлайн открытие кейсов</p>
+    <p>© 2025 Онлайн відкриття кейсів</p>
   </footer>
 
-  <!-- =====================
-       JavaScript: логика анимации и обработчики
-       ===================== -->
-  <script>
-    /**********************
-     * Настройки и данные *
-     **********************/
-    const imageWidth = 150; // ширина одного изображения в рулетке (в пикселях)
-    const loops = 3;        // число полных циклов рулетки (без финальной группы)
-
-    // Массивы скинов для каждого кейса
-    const case1Skins = [
-      { name: "Кейс 1 - Скин A", image: "images/skins/SkinA1.jpg" },
-      { name: "Кейс 1 - Скин B", image: "images/skins/SkinA2.jpg" },
-      { name: "Кейс 1 - Скин C", image: "images/skins/SkinA3.jpg" },
-      { name: "Кейс 1 - Скин D", image: "images/skins/SkinA4.jpg" },
-      { name: "Кейс 1 - Скин E", image: "images/skins/SkinA5.jpg" }
-    ];
-    const case2Skins = [
-      { name: "Кейс 2 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+A" },
-      { name: "Кейс 2 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+B" },
-      { name: "Кейс 2 - Скин C", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+C" },
-      { name: "Кейс 2 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+D" },
-      { name: "Кейс 2 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+E" }
-    ];
-    const case3Skins = [
-      { name: "Кейс 3 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+A" },
-      { name: "Кейс 3 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+B" },
-      { name: "Кейс 3 - Скин C", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+C" },
-      { name: "Кейс 3 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+D" },
-      { name: "Кейс 3 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+E" }
-    ];
-
-    /*********************************************
-     * Функция: Инициализация анимации рулетки  *
-     *********************************************/
-    function openCaseModal(skins, mainImageId, resultId) {
-      const modal = document.getElementById("rouletteModal");
-      const track = document.getElementById("rouletteTrack");
-
-      // Показываем модальное окно и очищаем трек
-      modal.style.display = "flex";
-      track.innerHTML = "";
-
-      // Формируем массив для анимации:
-      // Повторяем скины несколько раз для создания эффекта непрерывной рулетки
-      let totalSkins = [];
-      for (let i = 0; i < loops; i++) {
-        totalSkins = totalSkins.concat(skins);
-      }
-      // Добавляем финальную группу для определения результата
-      totalSkins = totalSkins.concat(skins);
-
-      // Заполняем трек изображениями
-      totalSkins.forEach(skin => {
-        const img = document.createElement("img");
-        img.src = skin.image;
-        img.alt = skin.name;
-        track.appendChild(img);
-      });
-
-      // Определяем финальный индекс выбранного скина
-      const finalIndex = Math.floor(Math.random() * skins.length);
-      const totalImagesBefore = loops * skins.length + finalIndex;
-      const targetOffset = totalImagesBefore * imageWidth;
-
-      // Небольшая задержка для гарантии отрисовки элементов, затем запускаем анимацию
-      setTimeout(() => {
-        track.style.transition = "transform 3s ease-out";
-        track.style.transform = `translateX(-${targetOffset}px)`;
-      }, 50);
-
-      // После завершения анимации рулетки
-      track.addEventListener("transitionend", function handleTransition() {
-        track.removeEventListener("transitionend", handleTransition);
-        const selectedSkin = skins[finalIndex];
-
-        // Создаем элемент для эффекта "выпадения" выбранного скина
-        const winningImg = document.createElement("img");
-        winningImg.src = selectedSkin.image;
-        winningImg.alt = selectedSkin.name;
-        winningImg.classList.add("winning-img");
-
-        // Добавляем его внутрь модального окна (внутри .modal-content)
-        document.querySelector(".modal-content").appendChild(winningImg);
-
-        // После окончания анимации "выпадения" обновляем контент кейса и закрываем окно
-        winningImg.addEventListener("animationend", function() {
-          document.getElementById(mainImageId).src = selectedSkin.image;
-          document.getElementById(resultId).textContent = "Вы получили: " + selectedSkin.name;
-
-          // Удаляем элемент эффекта и очищаем трек рулетки
-          winningImg.remove();
-          track.innerHTML = "";
-          // Закрываем модальное окно через небольшую задержку
-          setTimeout(() => {
-            modal.style.display = "none";
-          }, 1000);
-        });
-      });
-    }
-
-    /*********************************************
-     * Обработчики событий для кнопок открытия кейсов *
-     *********************************************/
-    document.getElementById("openCase1Btn").addEventListener("click", function() {
-      openCaseModal(case1Skins, "case1Image", "result1");
-    });
-    document.getElementById("openCase2Btn").addEventListener("click", function() {
-      openCaseModal(case2Skins, "case2Image", "result2");
-    });
-    document.getElementById("openCase3Btn").addEventListener("click", function() {
-      openCaseModal(case3Skins, "case3Image", "result3");
-    });
-
-    /*********************************************
-     * Обработчик кнопки "Выход" в модальном окне *
-     *********************************************/
-    document.getElementById("exitModalBtn").addEventListener("click", function() {
-      const modal = document.getElementById("rouletteModal");
-      const track = document.getElementById("rouletteTrack");
-      track.style.transition = "";
-      track.style.transform = "";
-      track.innerHTML = "";
-      modal.style.display = "none";
-    });
-  </script>
+  <!-- Підключення зовнішнього JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
