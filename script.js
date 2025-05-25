@@ -4,15 +4,18 @@ const continuousSpinTime = 3000;
 const decelerationDuration = 3000;
 const extraCycles = 2;
 
-const case1Skins = [...]; // як у тебе
-const case2Skins = [...]; // як у тебе
-const case3Skins = [...]; // як у тебе
+const case1Skins = [
+  { name: "Кейс 1 – Скін A", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+A" },
+  { name: "Кейс 1 – Скін B", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+B" },
+  { name: "Кейс 1 – Скін C", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+C" },
+  { name: "Кейс 1 – Скін D", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+D" },
+  { name: "Кейс 1 – Скін E", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+E" }
+];
 
 let spinRAF;
 let currentOffset = 0;
 let isSpinning = false;
 
-// 🚀 Запуск прокрутки через requestAnimationFrame
 function startContinuousSpin(track, skins) {
   cancelAnimationFrame(spinRAF);
   track.replaceChildren();
@@ -39,85 +42,34 @@ function startContinuousSpin(track, skins) {
   animate();
 }
 
-// 🛑 Зупинка прокрутки з плавним сповільненням
-function stopRoulette(track, skins, onStopCallback) {
+function startDeceleration(track, skins, selectedIndex) {
   cancelAnimationFrame(spinRAF);
+  let targetOffset = -selectedIndex * imageWidth;
+  let decelerationStart = performance.now();
 
-  const finalIndex = Math.floor(Math.random() * skins.length);
-  let desiredModulo = finalIndex * imageWidth - 250;
-  if (desiredModulo < 0) desiredModulo += cycleWidth;
+  function decelerate() {
+    let progress = (performance.now() - decelerationStart) / decelerationDuration;
+    if (progress < 1) {
+      currentOffset += speed * (1 - progress); // slower over time
+      track.style.transform = `translateX(-${currentOffset}px)`;
+      spinRAF = requestAnimationFrame(decelerate);
+    } else {
+      currentOffset = targetOffset;
+      track.style.transform = `translateX(-${currentOffset}px)`;
+      displayWinner(skins[selectedIndex].image);
+    }
+  }
 
-  const remainder = currentOffset % cycleWidth;
-  let delta = desiredModulo - remainder;
-  if (delta < 0) delta += cycleWidth;
-
-  const extra = cycleWidth * extraCycles;
-  const finalTotalOffset = currentOffset - remainder + delta + extra;
-
-  track.style.transition = `transform ${decelerationDuration}ms ease-out`;
-  track.style.transform = `translateX(-${finalTotalOffset}px)`;
-
-  track.addEventListener("transitionend", () => {
-    onStopCallback(finalIndex);
-  }, { once: true });
+  decelerate();
 }
 
-// 🎁 Відкриття кейсу
-function openCaseModal(skins, mainImageId, resultId) {
-  if (isSpinning) return;
-  isSpinning = true;
-
-  const modal = document.getElementById("rouletteModal");
-  const track = document.getElementById("rouletteTrack");
-  const container = document.getElementById("rouletteContainer");
-
-  modal.style.display = "flex";
-  startContinuousSpin(track, skins);
-
-  setTimeout(() => {
-    stopRoulette(track, skins, function (finalIndex) {
-      const selectedSkin = skins[finalIndex];
-      const winningImg = document.createElement("img");
-      winningImg.src = selectedSkin.image;
-      winningImg.alt = selectedSkin.name;
-      winningImg.classList.add("winning-img");
-      container.appendChild(winningImg);
-
-      winningImg.addEventListener("animationend", function () {
-        document.getElementById(mainImageId).src = selectedSkin.image;
-        document.getElementById(resultId).textContent = "Ви отримали: " + selectedSkin.name;
-        winningImg.remove();
-        track.innerHTML = "";
-        track.style.transition = "";
-        track.style.transform = "";
-        setTimeout(() => {
-          modal.style.display = "none";
-          isSpinning = false;
-        }, 1000);
-      });
-    });
-  }, continuousSpinTime);
+function displayWinner(imageSrc) {
+  const winningImg = document.createElement("img");
+  winningImg.src = imageSrc;
+  winningImg.classList.add("winning-img");
+  document.body.appendChild(winningImg);
 }
 
-// 📦 Обробники кнопок
-document.getElementById("openCase1Btn").addEventListener("click", function () {
-  openCaseModal(case1Skins, "case1Image", "result1");
-});
-document.getElementById("openCase2Btn").addEventListener("click", function () {
-  openCaseModal(case2Skins, "case2Image", "result2");
-});
-document.getElementById("openCase3Btn").addEventListener("click", function () {
-  openCaseModal(case3Skins, "case3Image", "result3");
-});
-
-// ❌ Вихід
-document.getElementById("exitModalBtn").addEventListener("click", function () {
-  const modal = document.getElementById("rouletteModal");
-  const track = document.getElementById("rouletteTrack");
-  cancelAnimationFrame(spinRAF);
-  isSpinning = false;
-  track.style.transition = "";
-  track.style.transform = "";
-  track.innerHTML = "";
-  modal.style.display = "none";
+document.getElementById("openCase1Btn").addEventListener("click", () => {
+  startContinuousSpin(document.getElementById("rouletteTrack"), case1Skins);
 });
