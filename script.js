@@ -25,11 +25,11 @@ const case1Skins = [
 ];
 
 const case2Skins = [
-  { name: "Кейс 2 – Скін A", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скін+A" },
-  { name: "Кейс 2 – Скін B", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скін+B" },
-  { name: "Кейс 2 – Скін C", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скін+C" },
-  { name: "Кейс 2 – Скін D", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скін+D" },
-  { name: "Кейс 2 – Скін E", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скін+E" }
+  { name: "Кейс 2 – Скін A", image: "images/skins/Skin_B1.png" },
+  { name: "Кейс 2 – Скін B", image: "images/skins/Skin_B2.png" },
+  { name: "Кейс 2 – Скін C", image: "images/skins/Skin_B3.png" },
+  { name: "Кейс 2 – Скін D", image: "images/skins/Skin_B4.png" },
+  { name: "Кейс 2 – Скін E", image: "images/skins/Skin_B5.png" }
 ];
 
 const case3Skins = [
