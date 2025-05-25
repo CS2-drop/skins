@@ -62,9 +62,9 @@
       font-size: 1.2em;
       color: #00ffcc;
     }
-    /* Стили для модального окна */
+    /* Стили модального окна */
     .modal {
-      display: none; /* Скрыто по умолчанию */
+      display: none; /* по умолчанию скрыто */
       position: fixed;
       top: 0;
       left: 0;
@@ -76,10 +76,18 @@
       z-index: 100;
     }
     .modal-content {
+      position: relative; /* для абсолютного позиционирования вложенных элементов */
       background: #222;
       padding: 20px;
       border: 2px solid #00ffcc;
       border-radius: 10px;
+      display: inline-block;
+    }
+    /* Кнопка выхода из модального окна */
+    .exit-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
     /* Стили рулетки */
     #rouletteContainer {
@@ -87,7 +95,7 @@
       height: 150px;
       overflow: hidden;
       border: 2px solid #00ffcc;
-      margin: 0 auto;
+      margin: 20px auto;
       position: relative;
     }
     #rouletteTrack {
@@ -100,6 +108,33 @@
       width: 150px;
       height: 150px;
       object-fit: cover;
+    }
+    /* Эффект выпадения выбранного скина */
+    @keyframes dropEffect {
+      0% {
+        transform: translate(-50%, -60%) scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        transform: translate(-50%, -40%) scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+    .winning-img {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 2px solid #00ffcc;
+      animation: dropEffect 1s ease-out forwards;
+      z-index: 101;
     }
   </style>
 </head>
@@ -118,6 +153,7 @@
       <button id="openCase1Btn" class="btn">Открыть кейс</button>
       <div id="result1" class="result"></div>
     </div>
+
     <!-- Кейс 2 -->
     <div id="case2" class="case-section">
       <div class="case-title">Кейс 2</div>
@@ -125,6 +161,7 @@
       <button id="openCase2Btn" class="btn">Открыть кейс</button>
       <div id="result2" class="result"></div>
     </div>
+
     <!-- Кейс 3 -->
     <div id="case3" class="case-section">
       <div class="case-title">Кейс 3</div>
@@ -137,6 +174,7 @@
   <!-- Модальное окно для анимации рулетки -->
   <div id="rouletteModal" class="modal">
     <div class="modal-content">
+      <button id="exitModalBtn" class="btn exit-btn">Выход</button>
       <h2>Открытие кейса...</h2>
       <div id="rouletteContainer">
         <div id="rouletteTrack"></div>
@@ -152,8 +190,8 @@
   <!-- JavaScript -->
   <script>
     // Настройки анимации рулетки
-    const imageWidth = 150; // ширина одного изображения (в пикселях)
-    const loops = 3;        // число полных оборотов перед финалом
+    const imageWidth = 150; // ширина одного изображения в пикселях
+    const loops = 3;        // число полных оборотов перед финальным выпадением
 
     // Массивы скинов для каждого кейса (по 5 скинов)
     const case1Skins = [
@@ -178,11 +216,21 @@
       { name: "Кейс 3 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+E" }
     ];
 
-    // Получаем элементы модального окна и рулетки
+    // Получаем элементы модального окна, рулетки и кнопку выхода
     const rouletteModal = document.getElementById("rouletteModal");
     const rouletteTrack = document.getElementById("rouletteTrack");
+    const exitModalBtn = document.getElementById("exitModalBtn");
 
-    // Функция, которая запускает анимацию открывания кейса через модальное окно
+    // Обработчик кнопки выхода — сбрасывает анимации и скрывает модальное окно
+    exitModalBtn.addEventListener("click", () => {
+      rouletteTrack.style.transition = "";
+      rouletteTrack.style.transform = "";
+      // Удаляем все вложенные изображения из рулетки
+      rouletteTrack.innerHTML = "";
+      rouletteModal.style.display = "none";
+    });
+
+    // Функция, запускающая анимацию открытия кейса через модальное окно
     // skins – массив скинов для выбранного кейса
     // mainImageId – ID изображения кейса на основной странице
     // resultId – ID блока для вывода результата (названия скина)
@@ -192,8 +240,7 @@
       // Очищаем содержимое рулетки
       rouletteTrack.innerHTML = "";
       
-      // Формируем последовательность изображений для анимации.
-      // Повторяем скины несколько раз для эффекта «крутящейся рулетки»
+      // Формируем последовательность изображений для эффекта рулетки.
       let totalSkins = [];
       for (let l = 0; l < loops; l++) {
         totalSkins = totalSkins.concat(skins);
@@ -209,38 +256,47 @@
         rouletteTrack.appendChild(img);
       });
       
-      // Выбираем случайный скин из последней группы для финала
+      // Выбираем случайный индекс финального результата из последней группы
       const finalIndex = Math.floor(Math.random() * skins.length);
-      
-      // Вычисляем целевое смещение.
-      // Количество изображений до финального результата = loops * (число скинов) + finalIndex
+      // Общее число изображений до финального результата
       const totalImagesBefore = loops * skins.length + finalIndex;
-      const targetOffset = totalImagesBefore * imageWidth;  // в пикселях
+      const targetOffset = totalImagesBefore * imageWidth; // в пикселях
       
-      // Запускаем анимацию рулетки с плавным переходом
+      // Запускаем анимацию рулетки
       rouletteTrack.style.transition = "transform 3s ease-out";
       rouletteTrack.style.transform = "translateX(-" + targetOffset + "px)";
       
-      // После завершения анимации
+      // После завершения анимации рулетки
       rouletteTrack.addEventListener("transitionend", function handleTransitionEnd() {
         // Убираем обработчик, чтобы он сработал только один раз
         rouletteTrack.removeEventListener("transitionend", handleTransitionEnd);
         
-        // Получаем выбранный скин
+        // Определяем выбранный скин
         const selectedSkin = skins[finalIndex];
         
-        // Обновляем изображение кейса и выводим результат
-        document.getElementById(mainImageId).src = selectedSkin.image;
-        document.getElementById(resultId).textContent = "Вы получили: " + selectedSkin.name;
+        // Создаём элемент с эффектом выпадения выбранного скина
+        const winningImg = document.createElement("img");
+        winningImg.src = selectedSkin.image;
+        winningImg.alt = selectedSkin.name;
+        winningImg.classList.add("winning-img");
+        // Добавляем элемент в модальное окно (внутрь modal-content)
+        document.querySelector(".modal-content").appendChild(winningImg);
         
-        // Сбрасываем стили для следующей анимации
-        rouletteTrack.style.transition = "";
-        rouletteTrack.style.transform = "";
-        
-        // Закрываем модальное окно через 1 секунду, чтобы пользователь увидел финальное положение рулетки
-        setTimeout(() => {
-          rouletteModal.style.display = "none";
-        }, 1000);
+        // После завершения анимации выпадения
+        winningImg.addEventListener("animationend", function() {
+          // Обновляем изображение кейса на главной странице и выводим результат
+          document.getElementById(mainImageId).src = selectedSkin.image;
+          document.getElementById(resultId).textContent = "Вы получили: " + selectedSkin.name;
+          
+          // Удаляем элемент с эффектом выпадения
+          winningImg.remove();
+          // Очищаем рулетку для следующего запуска
+          rouletteTrack.innerHTML = "";
+          // Закрываем модальное окно через небольшую задержку
+          setTimeout(() => {
+            rouletteModal.style.display = "none";
+          }, 1000);
+        });
       });
     }
 
@@ -248,11 +304,9 @@
     document.getElementById('openCase1Btn').addEventListener('click', () => {
       openCaseModal(case1Skins, 'case1Image', 'result1');
     });
-
     document.getElementById('openCase2Btn').addEventListener('click', () => {
       openCaseModal(case2Skins, 'case2Image', 'result2');
     });
-
     document.getElementById('openCase3Btn').addEventListener('click', () => {
       openCaseModal(case3Skins, 'case3Image', 'result3');
     });
