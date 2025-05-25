@@ -104,6 +104,8 @@ footer p {
   width: 90%;
   max-width: 900px;  /* Збільшено розмір вікна */
   margin: auto;
+  /* Встановлено overflow: visible, щоб ефект випадання повністю відображався */
+  overflow: visible;
 }
 
 .exit-btn {
@@ -119,29 +121,18 @@ footer p {
    ===================== */
 /* Контейнер рулетки: збільшено розмір, щоб елементи були по центру */
 #rouletteContainer {
-  overflow: hidden;
-  border: 2px solid #00ffcc;
-  margin: 20px auto;
-  width: 750px;      /* Залишається ширина контейнера, що показує 3 зображення */
-  height: 250px;     /* Збільшена висота */
   position: relative;
+  margin: 20px auto;
+  width: 750px;      /* Відповідає показу 3 зображень по 250px */
+  height: 250px;     /* Висота контейнера */
+  overflow: hidden;  /* Для прокручування треку */
+  border: 2px solid #00ffcc;
 }
 
-/* Трек рулетки: ми будемо використовувати дві копії скінів для безперервного руху */
+/* Трек рулетки: розміщення зображень в один ряд */
 #rouletteTrack {
   display: flex;
-  /* Початкове положення буде встановлено через JS */
-}
-
-/* Клас для безперервної анімації – ключові кадри обертання по колу */
-#rouletteTrack.spinning {
-  animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: translateX(0); }
-  /* Один цикл – це ширина одного повного набору скінів */
-  to { transform: translateX(-1250px); }  /* 5 скінів * 250 = 1250px */
+  /* Початкове положення встановлюється JS через transform */
 }
 
 /* Зображення в треці */
@@ -152,14 +143,14 @@ footer p {
   border-right: 1px solid #121212;
 }
 
-/* Анімація "випадання" обраного скіна, масштабована та центрована */
+/* Анімація "випадання" обраного скіна, центрована */
 @keyframes dropEffect {
   0% {
     transform: scale(0.5) translateY(-20px);
     opacity: 0;
   }
   50% {
-    transform: scale(1.2) translateY(10px);
+    transform: scale(1) translateY(0);
     opacity: 1;
   }
   100% {
