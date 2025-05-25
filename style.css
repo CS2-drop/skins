@@ -80,16 +80,16 @@ footer p {
 }
 
 /* =====================
-   Модальне вікно для анімації рулетки
+   Модальне вікно для анімації
    ===================== */
 .modal {
-  display: none; /* За замовчуванням приховано */
+  display: none; /* Приховано за замовчуванням */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0,0,0,0.8);
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -104,7 +104,7 @@ footer p {
   width: 90%;
   max-width: 900px;  /* Збільшено розмір вікна */
   margin: auto;
-  /* Встановлено overflow: visible, щоб ефект випадання повністю відображався */
+  /* overflow: visible, щоб ефект випадання був повністю видний */
   overflow: visible;
 }
 
@@ -119,23 +119,23 @@ footer p {
 /* =====================
    Стилі рулетки та анімацій
    ===================== */
-/* Контейнер рулетки: збільшено розмір, щоб елементи були по центру */
+/* Контейнер рулетки */
 #rouletteContainer {
   position: relative;
   margin: 20px auto;
-  width: 750px;      /* Відповідає показу 3 зображень по 250px */
-  height: 250px;     /* Висота контейнера */
-  overflow: hidden;  /* Для прокручування треку */
+  width: 750px;      /* Показ 3 зображень по 250px */
+  height: 250px;
+  overflow: hidden;
   border: 2px solid #00ffcc;
 }
 
-/* Трек рулетки: розміщення зображень в один ряд */
+/* Трек рулетки */
 #rouletteTrack {
   display: flex;
-  /* Початкове положення встановлюється JS через transform */
+  /* Початкове положення задається через JS */
 }
 
-/* Зображення в треці */
+/* Зображення рулетки */
 #rouletteTrack img {
   width: 250px;
   height: 250px;
@@ -143,14 +143,24 @@ footer p {
   border-right: 1px solid #121212;
 }
 
-/* Анімація "випадання" обраного скіна, центрована */
+/* Клас для безперервного циклічного прокручування (CSS анімація) */
+.spinning {
+  animation: spinInfinite 3s linear infinite;
+}
+
+@keyframes spinInfinite {
+  from { transform: translateX(0); }
+  to { transform: translateX(-1250px); } /* Один цикл = 5 скінів */
+}
+
+/* Ефект "випадання" виграшного скіну */
 @keyframes dropEffect {
   0% {
     transform: scale(0.5) translateY(-20px);
     opacity: 0;
   }
   50% {
-    transform: scale(1) translateY(0);
+    transform: scale(1.1) translateY(0);
     opacity: 1;
   }
   100% {
