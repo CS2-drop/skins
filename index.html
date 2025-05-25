@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Онлайн открытие кейсов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Общие стили */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    header, footer {
+      padding: 20px;
+      background-color: #1a1a1a;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+    .content {
+      padding: 20px;
+    }
+    /* Секция кейса */
+    .case-section {
+      border: 2px solid #00ffcc;
+      margin: 20px auto;
+      padding: 10px;
+      width: 320px;
+      background-color: #000;
+    }
+    .case-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    .case-image {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border: 2px solid #00ffcc;
+    }
+    .btn {
+      margin-top: 10px;
+      background-color: #00ffcc;
+      border: none;
+      padding: 10px 20px;
+      color: #000;
+      font-size: 1.2em;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #00e6b8;
+    }
+    .result {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #00ffcc;
+    }
+    /* Анимация вращения */
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin {
+      animation: spin 1s linear;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Онлайн открытие кейсов</h1>
+  </header>
+
+  <!-- Основной контент -->
+  <div class="content">
+    <!-- Кейc 1 -->
+    <div id="case1" class="case-section">
+      <div class="case-title">Кейс 1</div>
+      <img id="case1Image" class="case-image" src="https://via.placeholder.com/300x300.png?text=Кейс+1" alt="Изображение кейса 1">
+      <button id="openCase1Btn" class="btn">Открыть кейс</button>
+      <div id="result1" class="result"></div>
+    </div>
+
+    <!-- Кейс 2 -->
+    <div id="case2" class="case-section">
+      <div class="case-title">Кейс 2</div>
+      <img id="case2Image" class="case-image" src="https://via.placeholder.com/300x300.png?text=Кейс+2" alt="Изображение кейса 2">
+      <button id="openCase2Btn" class="btn">Открыть кейс</button>
+      <div id="result2" class="result"></div>
+    </div>
+
+    <!-- Кейс 3 -->
+    <div id="case3" class="case-section">
+      <div class="case-title">Кейс 3</div>
+      <img id="case3Image" class="case-image" src="https://via.placeholder.com/300x300.png?text=Кейс+3" alt="Изображение кейса 3">
+      <button id="openCase3Btn" class="btn">Открыть кейс</button>
+      <div id="result3" class="result"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Онлайн открытие кейсов</p>
+  </footer>
+
+  <!-- JavaScript для функциональности -->
+  <script>
+    // Массивы скинов для каждого кейса (по 5 скинов)
+    const case1Skins = [
+      { name: "Кейс 1 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+A" },
+      { name: "Кейс 1 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+B" },
+      { name: "Кейс 1 - Скин C", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+C" },
+      { name: "Кейс 1 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+D" },
+      { name: "Кейс 1 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+E" }
+    ];
+
+    const case2Skins = [
+      { name: "Кейс 2 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+A" },
+      { name: "Кейс 2 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+B" },
+      { name: "Кейс 2 - Скин C", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+C" },
+      { name: "Кейс 2 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+D" },
+      { name: "Кейс 2 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+E" }
+    ];
+
+    const case3Skins = [
+      { name: "Кейс 3 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+A" },
+      { name: "Кейс 3 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+B" },
+      { name: "Кейс 3 - Скин C", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+C" },
+      { name: "Кейс 3 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+D" },
+      { name: "Кейс 3 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+E" }
+    ];
+
+    // Функция для открытия кейса
+    function openCase(caseImageId, resultId, skinsArray) {
+      const caseImage = document.getElementById(caseImageId);
+      const resultElem = document.getElementById(resultId);
+      // Очищаем предыдущий результат
+      resultElem.textContent = "";
+      // Добавляем анимацию вращения
+      caseImage.classList.add("spin");
+
+      // Через 1 секунду прекращаем анимацию и выбираем скин случайным образом
+      setTimeout(() => {
+        caseImage.classList.remove("spin");
+        const randomIndex = Math.floor(Math.random() * skinsArray.length);
+        const selectedSkin = skinsArray[randomIndex];
+        caseImage.src = selectedSkin.image;
+        resultElem.textContent = "Вы получили: " + selectedSkin.name;
+      }, 1000);
+    }
+
+    // Привязываем события клика к кнопкам каждого кейса
+    document.getElementById('openCase1Btn').addEventListener('click', () => {
+      openCase('case1Image', 'result1', case1Skins);
+    });
+
+    document.getElementById('openCase2Btn').addEventListener('click', () => {
+      openCase('case2Image', 'result2', case2Skins);
+    });
+
+    document.getElementById('openCase3Btn').addEventListener('click', () => {
+      openCase('case3Image', 'result3', case3Skins);
+    });
+  </script>
+</body>
+</html>
