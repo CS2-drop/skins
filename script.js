@@ -1,27 +1,27 @@
-/******************** 
+/********************
  * Глобальні змінні *
  ********************/
 let spinAnimationFrameId = null;
-let spinOffset = 0;
+let spinOffset = 0;       // Абсолютний зсув (не обнуляємо через mod)
 let spinStartTime = null;
-const spinSpeed = 416.67; // px/с (приблизно, можна коригувати)
-  
+const spinSpeed = 416.67; // px/с (приблизно)
+
 /**********************
  * Налаштування та дані *
  **********************/
-const imageWidth = 250;           // Ширина одного зображення (в px)
-const cycleWidth = 5 * imageWidth;  // Ширина одного набору скінів (1250px)
-const continuousSpinTime = 3000;  // Час безперервного обертання (мс)
-const decelerationDuration = 3000; // Тривалість сповільнення (мс)
-const extraCycles = 2;            // Додатково циклів для ефекту сповільнення
+const imageWidth = 250;            // Ширина одного зображення
+const cycleWidth = 5 * imageWidth;   // 1250 px – ширина одного набору скінів
+const continuousSpinTime = 3000;     // Час безперервного обертання (мс)
+const decelerationDuration = 3000;   // Тривалість сповільнення (мс)
+const extraCycles = 2;             // Додатково циклів для ефекту сповільнення
 
-// Масиви скінів (приклад для кейсу 1; для кейсів 2 і 3 можна покласти свої чи використати placeholder)
+// Масиви скінів
 const case1Skins = [
-  { name: "Кейс 1 – Скін A", image: "imagesskins/Skin_A1.jpg" },
-  { name: "Кейс 1 – Скін B", image: "imagesskins/Skin_A2.jpg" },
-  { name: "Кейс 1 – Скін C", image: "imagesskins/Skin_A3.jpg" },
-  { name: "Кейс 1 – Скін D", image: "imagesskins/Skin_A4.jpg" },
-  { name: "Кейс 1 – Скін E", image: "imagesskins/Skin_A5.jpg" }
+  { name: "Кейс 1 – Скін A", image: "images/skins/Skin_A1.jpg" },
+  { name: "Кейс 1 – Скін B", image: "images/skins/Skin_A2.jpg" },
+  { name: "Кейс 1 – Скін C", image: "images/skins/Skin_A3.jpg" },
+  { name: "Кейс 1 – Скін D", image: "images/skins/Skin_A4.jpg" },
+  { name: "Кейс 1 – Скін E", image: "images/skins/Skin_A5.jpg" }
 ];
 
 const case2Skins = [
@@ -41,10 +41,10 @@ const case3Skins = [
 ];
 
 /****************************************************
- * Функція: Безперервне обертання рулетки (з використанням requestAnimationFrame)
+ * Функція: Безперервне обертання рулетки
  ****************************************************/
 function startContinuousSpin(track, skins) {
-  // Заповнюємо трек кількома копіями скінів (наприклад, 20 копій) для забезпечення «безперервності»
+  // Заповнюємо трек кількома копіями скінів (20 копій)
   const numCopies = 20;
   track.innerHTML = "";
   for (let i = 0; i < numCopies; i++) {
@@ -56,11 +56,11 @@ function startContinuousSpin(track, skins) {
     });
   }
   
-  // Скидаємо контрольні змінні
+  // Скидаємо контрольні змінні (зберігаємо абсолютне значення)
   spinOffset = 0;
   spinStartTime = null;
   
-  // Запускаємо анімацію за допомогою requestAnimationFrame
+  // Анімація за допомогою requestAnimationFrame – використовуючи абсолютний зсув, але відображаємо за модулем cycleWidth
   function animateSpin(timestamp) {
     if (!spinStartTime) {
       spinStartTime = timestamp;
@@ -68,33 +68,27 @@ function startContinuousSpin(track, skins) {
     let deltaTime = (timestamp - spinStartTime) / 1000; // у секундах
     spinStartTime = timestamp;
     spinOffset += spinSpeed * deltaTime;
-    // Щоб не накопичувались надто великі числа, обмежимо значення за модулем загальної ширини треку
-    const totalWidth = numCopies * cycleWidth;
-    if (spinOffset > totalWidth) {
-      spinOffset = spinOffset % totalWidth;
-    }
-    track.style.transform = `translateX(-${spinOffset}px)`;
+    // Встановлюємо трансформацію за модулем (для безперервного циклу)
+    track.style.transform = `translateX(-${spinOffset % (numCopies * cycleWidth)}px)`;
     spinAnimationFrameId = requestAnimationFrame(animateSpin);
   }
   spinAnimationFrameId = requestAnimationFrame(animateSpin);
 }
 
 /****************************************************
- * Функція: Зупинка рулетки із сповільненням та розрахунком остаточного положення
+ * Функція: Зупинка рулетки із сповільненням
  ****************************************************/
 function stopRoulette(track, skins, onStopCallback) {
-  // Зупиняємо requestAnimationFrame
+  // Зупиняємо requestAnimationFrame (не робимо модульне скорочення spinOffset)
   cancelAnimationFrame(spinAnimationFrameId);
   
-  // Використовуємо поточне значення spinOffset як currentOffset
-  const currentOffset = spinOffset;
-  
-  // Обираємо випадковий індекс кінцевого скіну
+  const currentOffset = spinOffset; // Абсолютний зсув
   const finalIndex = Math.floor(Math.random() * skins.length);
   
-  // Розраховуємо бажане положення (щоб обраний скін був по центру: зліва має бути 250px)
+  // Розрахунок бажаного положення:
+  // Хочемо, щоб виграшний скін (номер finalIndex) мав лівий край на 250px (центр контейнера)
   let desiredModulo = finalIndex * imageWidth - 250;
-  if (desiredModulo < 0) { 
+  if (desiredModulo < 0) {
     desiredModulo += cycleWidth;
   }
   
@@ -105,9 +99,8 @@ function stopRoulette(track, skins, onStopCallback) {
   const extra = cycleWidth * extraCycles;
   const finalTotalOffset = currentOffset - remainder + delta + extra;
   
-  // Застосовуємо перехід для плавного сповільнення
   track.style.transition = `transform ${decelerationDuration}ms ease-out`;
-  track.style.transform = `translateX(-${finalTotalOffset}px)`;
+  track.style.transform = `translateX(-${finalTotalOffset % (20 * cycleWidth)}px)`;
   
   track.addEventListener("transitionend", function handler() {
     track.removeEventListener("transitionend", handler);
@@ -116,7 +109,7 @@ function stopRoulette(track, skins, onStopCallback) {
 }
 
 /****************************************************
- * Функція: Відкриття кейсу (ініціація анімації, зупинка і ефект "випадання")
+ * Функція: Відкриття кейсу
  ****************************************************/
 function openCaseModal(skins, mainImageId, resultId) {
   const modal = document.getElementById("rouletteModal");
@@ -125,15 +118,15 @@ function openCaseModal(skins, mainImageId, resultId) {
   // Показуємо модальне вікно
   modal.style.display = "flex";
   
-  // Запускаємо безперервне обертання рулетки
+  // Запускаємо безперервне обертання
   startContinuousSpin(track, skins);
   
-  // Через заданий час зупиняємо рулетку
+  // Після заданого часу зупиняємо рулетку
   setTimeout(() => {
     stopRoulette(track, skins, function(finalIndex) {
       const selectedSkin = skins[finalIndex];
       
-      // Створюємо ефект "випадання" обраного скіну та додаємо безпосередньо до контейнера рулетки
+      // Створюємо ефект "випадання" – додаємо елемент у контейнер рулетки (в межах контейнера)
       const winningImg = document.createElement("img");
       winningImg.src = selectedSkin.image;
       winningImg.alt = selectedSkin.name;
@@ -141,10 +134,9 @@ function openCaseModal(skins, mainImageId, resultId) {
       document.getElementById("rouletteContainer").appendChild(winningImg);
       
       winningImg.addEventListener("animationend", function() {
-        // Після завершення анімації оновлюємо кейс та результат
+        // Оновлюємо зображення кейсу та текст результату
         document.getElementById(mainImageId).src = selectedSkin.image;
         document.getElementById(resultId).textContent = "Ви отримали: " + selectedSkin.name;
-        // Видаляємо ефект "випадання" та очищаємо рулетку
         winningImg.remove();
         track.innerHTML = "";
         track.style.transition = "";
@@ -157,7 +149,7 @@ function openCaseModal(skins, mainImageId, resultId) {
 }
 
 /*********************************************
- * Обробники кнопок відкриття кейсів *
+ * Обробники кнопок відкриття кейсів
  *********************************************/
 document.getElementById("openCase1Btn").addEventListener("click", function() {
   openCaseModal(case1Skins, "case1Image", "result1");
@@ -170,7 +162,7 @@ document.getElementById("openCase3Btn").addEventListener("click", function() {
 });
 
 /*********************************************
- * Обробник кнопки "Вихід" у модальному вікні *
+ * Обробник кнопки "Вихід" у модальному вікні
  *********************************************/
 document.getElementById("exitModalBtn").addEventListener("click", function() {
   const modal = document.getElementById("rouletteModal");
