@@ -2,7 +2,7 @@
  * Глобальні змінні *
  ********************/
 let spinAnimationFrameId = null;
-let spinOffset = 0;       // Абсолютний зсув (не обнуляємо через mod)
+let spinOffset = 0;       // Абсолютний зсув (не обнуляємо через модуль)
 let spinStartTime = null;
 const spinSpeed = 416.67; // px/с (приблизно)
 
@@ -60,16 +60,15 @@ function startContinuousSpin(track, skins) {
   spinOffset = 0;
   spinStartTime = null;
   
-  // Анімація за допомогою requestAnimationFrame – використовуючи абсолютний зсув, 
-  // але відображаємо за модулем (для безперервного циклу)
+  // Анімація за допомогою requestAnimationFrame – використовуючи абсолютний зсув,
+  // проте відображення здійснюється за модулем для створення ефекту циклічності
   function animateSpin(timestamp) {
     if (!spinStartTime) {
       spinStartTime = timestamp;
     }
-    let deltaTime = (timestamp - spinStartTime) / 1000; // у секундах
+    let deltaTime = (timestamp - spinStartTime) / 1000; // в секундах
     spinStartTime = timestamp;
     spinOffset += spinSpeed * deltaTime;
-    // Встановлюємо трансформацію за модулем
     track.style.transform = `translateX(-${spinOffset % (numCopies * cycleWidth)}px)`;
     spinAnimationFrameId = requestAnimationFrame(animateSpin);
   }
@@ -80,15 +79,16 @@ function startContinuousSpin(track, skins) {
  * Функція: Зупинка рулетки із сповільненням та розрахунком остаточного положення
  ****************************************************/
 function stopRoulette(track, skins, onStopCallback) {
-  // Зупиняємо requestAnimationFrame (не робимо модульне скорочення spinOffset)
+  // Зупиняємо requestAnimationFrame
   cancelAnimationFrame(spinAnimationFrameId);
   
   const currentOffset = spinOffset; // Абсолютний зсув
   const finalIndex = Math.floor(Math.random() * skins.length);
   
   // Розрахунок бажаного положення:
-  // Хочемо, щоб виграшний скін (номер finalIndex) мав лівий край на 250px (центр контейнера)
-  let desiredModulo = finalIndex * imageWidth - 500;
+  // Ми хочемо, щоб виграшний скин був відображений як другий зображення в контейнері (зліва 250px),
+  // щоб його центр (250+125=375px) збігався з маркером
+  let desiredModulo = finalIndex * imageWidth - 250;
   if (desiredModulo < 0) { 
     desiredModulo += cycleWidth;
   }
@@ -100,9 +100,8 @@ function stopRoulette(track, skins, onStopCallback) {
   const extra = cycleWidth * extraCycles;
   const finalTotalOffset = currentOffset - remainder + delta + extra;
   
-  // Застосовуємо перехід для плавного сповільнення
+  // Плавне сповільнення із застосуванням CSS-переходу
   track.style.transition = `transform ${decelerationDuration}ms ease-out`;
-  // НЕ використовуйте модуль тут, щоб остаточне положення точно відповідало обчисленню
   track.style.transform = `translateX(-${finalTotalOffset}px)`;
   
   track.addEventListener("transitionend", function handler() {
@@ -118,18 +117,18 @@ function openCaseModal(skins, mainImageId, resultId) {
   const modal = document.getElementById("rouletteModal");
   const track = document.getElementById("rouletteTrack");
   
-  // Показуємо модальне вікно
+  // Відображаємо модальне вікно
   modal.style.display = "flex";
   
-  // Запускаємо безперервне обертання рулетки
+  // Запускаємо постійне обертання
   startContinuousSpin(track, skins);
   
-  // Через заданий час зупиняємо рулетку
+  // Через деякий час зупиняємо рулетку
   setTimeout(() => {
     stopRoulette(track, skins, function(finalIndex) {
       const selectedSkin = skins[finalIndex];
       
-      // Створюємо ефект "випадання" – додаємо елемент у контейнер рулетки (в межах контейнера)
+      // Створюємо ефект "випадання" – додаємо елемент у контейнер рулетки
       const winningImg = document.createElement("img");
       winningImg.src = selectedSkin.image;
       winningImg.alt = selectedSkin.name;
