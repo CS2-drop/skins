@@ -1,1 +1,172 @@
+/* =====================
+   Загальні стилі сторінки
+   ===================== */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+header {
+  background-color: #1a1a1a;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+main {
+  padding: 20px;
+}
+
+footer {
+  background-color: #1a1a1a;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+footer p {
+  margin: 0;
+  font-size: 1em;
+}
+
+/* =====================
+   Стилі секцій кейсів
+   ===================== */
+.case-section {
+  margin: 20px auto;
+  padding: 10px;
+  width: 320px;
+  background-color: #000;
+  border: 2px solid #00ffcc;
+}
+
+.case-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.case-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border: 2px solid #00ffcc;
+}
+
+.btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #00ffcc;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #00e6b8;
+}
+
+.result {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: #00ffcc;
+}
+
+/* =====================
+   Модальне вікно для анімації рулетки
+   ===================== */
+.modal {
+  display: none; /* За замовчуванням приховано */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background: #222;
+  padding: 20px;
+  border: 2px solid #00ffcc;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 900px;  /* Збільшено розмір вікна */
+  margin: auto;
+}
+
+.exit-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+/* =====================
+   Стилі рулетки та анімацій
+   ===================== */
+/* Контейнер рулетки: збільшено розмір, щоб все було по центру */
+#rouletteContainer {
+  overflow: hidden;
+  border: 2px solid #00ffcc;
+  margin: 20px auto;
+  width: 750px;      /* Збільшена ширина контейнера */
+  height: 250px;     /* Збільшена висота контейнера */
+  position: relative;
+}
+
+/* Трек рулетки: зображення розташовано в один ряд */
+#rouletteTrack {
+  display: flex;
+  transition: transform 3s ease-out;
+}
+
+/* Змінено розміри зображення рулетки */
+#rouletteTrack img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-right: 1px solid #121212;
+}
+
+/* Анімація "випадання" обраного скіна, масштабована та центрована */
+@keyframes dropEffect {
+  0% {
+    transform: scale(0.5) translateY(-20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(10px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.winning-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border: 2px solid #00ffcc;
+  animation: dropEffect 1s ease-out forwards;
+  z-index: 101;
+}
 
