@@ -104,7 +104,7 @@ footer p {
   width: 90%;
   max-width: 900px;  /* Збільшено розмір вікна */
   margin: auto;
-  overflow: visible; /* Щоб ефект випадання був повністю видний */
+  overflow: visible; /* Щоб ефект "випадання" повністю відображався */
 }
 
 .exit-btn {
@@ -116,7 +116,7 @@ footer p {
 }
 
 /* =====================
-   Стилі рулетки та анімацій
+   Стилі рулетки та маркера
    ===================== */
 /* Контейнер рулетки */
 #rouletteContainer {
@@ -134,12 +134,24 @@ footer p {
   /* Початкове положення задається через JS */
 }
 
-/* Цей блок додано, як і було запрошено: */
+/* Зображення в рулетці */
 #rouletteTrack img {
   width: 250px;
   height: 250px;
   object-fit: cover;
   border-right: 1px solid #121212;
+}
+
+/* Маркер, що центрований всередині контейнера */
+#rouletteMarker {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #ff0000;
+  transform: translateX(-50%);
+  z-index: 200;
 }
 
 /* Ефект "випадання" виграшного скіну */
