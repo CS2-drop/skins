@@ -80,16 +80,16 @@ footer p {
 }
 
 /* =====================
-   Модальне вікно для анімації рулетки
+   Модальне вікно для анімації
    ===================== */
 .modal {
-  display: none; /* За замовчуванням приховано */
+  display: none; /* Приховано за замовчуванням */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0,0,0,0.8);
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -104,6 +104,7 @@ footer p {
   width: 90%;
   max-width: 900px;  /* Збільшено розмір вікна */
   margin: auto;
+  overflow: visible; /* Щоб ефект випадання повністю відображався */
 }
 
 .exit-btn {
@@ -117,23 +118,23 @@ footer p {
 /* =====================
    Стилі рулетки та анімацій
    ===================== */
-/* Контейнер рулетки: збільшено розмір, щоб все було по центру */
+/* Контейнер рулетки */
 #rouletteContainer {
+  position: relative;
+  margin: 20px auto;
+  width: 750px;      /* Показ 3 зображень по 250px */
+  height: 250px;
   overflow: hidden;
   border: 2px solid #00ffcc;
-  margin: 20px auto;
-  width: 750px;      /* Збільшена ширина контейнера */
-  height: 250px;     /* Збільшена висота контейнера */
-  position: relative;
 }
 
-/* Трек рулетки: зображення розташовано в один ряд */
+/* Трек рулетки */
 #rouletteTrack {
   display: flex;
-  transition: transform 3s ease-out;
+  /* Початкове положення задається через JS */
 }
 
-/* Змінено розміри зображення рулетки */
+/* Зображення в рулетці */
 #rouletteTrack img {
   width: 250px;
   height: 250px;
@@ -141,14 +142,14 @@ footer p {
   border-right: 1px solid #121212;
 }
 
-/* Анімація "випадання" обраного скіна, масштабована та центрована */
+/* Ефект "випадання" виграшного скіну */
 @keyframes dropEffect {
   0% {
     transform: scale(0.5) translateY(-20px);
     opacity: 0;
   }
   50% {
-    transform: scale(1.2) translateY(10px);
+    transform: scale(1.1) translateY(0);
     opacity: 1;
   }
   100% {
