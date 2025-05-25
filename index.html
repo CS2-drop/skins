@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Онлайн открытие кейсов</title>
+  <title>Онлайн открытие кейсов с анимацией</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* Общие стили */
@@ -25,7 +25,7 @@
     .content {
       padding: 20px;
     }
-    /* Секция кейса */
+    /* Стили секций кейсов */
     .case-section {
       border: 2px solid #00ffcc;
       margin: 20px auto;
@@ -62,13 +62,44 @@
       font-size: 1.2em;
       color: #00ffcc;
     }
-    /* Анимация вращения */
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    /* Стили для модального окна */
+    .modal {
+      display: none; /* Скрыто по умолчанию */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
     }
-    .spin {
-      animation: spin 1s linear;
+    .modal-content {
+      background: #222;
+      padding: 20px;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+    }
+    /* Стили рулетки */
+    #rouletteContainer {
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      border: 2px solid #00ffcc;
+      margin: 0 auto;
+      position: relative;
+    }
+    #rouletteTrack {
+      display: flex;
+      position: relative;
+      left: 0;
+      transition: transform 3s ease-out;
+    }
+    #rouletteTrack img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
     }
   </style>
 </head>
@@ -78,16 +109,15 @@
     <h1>Онлайн открытие кейсов</h1>
   </header>
 
-  <!-- Основной контент -->
+  <!-- Основной контент с 3 кейсами -->
   <div class="content">
-    <!-- Кейc 1 -->
+    <!-- Кейс 1 -->
     <div id="case1" class="case-section">
       <div class="case-title">Кейс 1</div>
-      <img id="case1Image" class="case-image" src="images/cases/case1.png" alt="Изображение кейса 1">
+      <img id="case1Image" class="case-image" src="https://via.placeholder.com/300x300.png?text=Кейс+1" alt="Изображение кейса 1">
       <button id="openCase1Btn" class="btn">Открыть кейс</button>
       <div id="result1" class="result"></div>
     </div>
-
     <!-- Кейс 2 -->
     <div id="case2" class="case-section">
       <div class="case-title">Кейс 2</div>
@@ -95,7 +125,6 @@
       <button id="openCase2Btn" class="btn">Открыть кейс</button>
       <div id="result2" class="result"></div>
     </div>
-
     <!-- Кейс 3 -->
     <div id="case3" class="case-section">
       <div class="case-title">Кейс 3</div>
@@ -105,13 +134,27 @@
     </div>
   </div>
 
+  <!-- Модальное окно для анимации рулетки -->
+  <div id="rouletteModal" class="modal">
+    <div class="modal-content">
+      <h2>Открытие кейса...</h2>
+      <div id="rouletteContainer">
+        <div id="rouletteTrack"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer>
     <p>© 2025 Онлайн открытие кейсов</p>
   </footer>
 
-  <!-- JavaScript для функциональности -->
+  <!-- JavaScript -->
   <script>
+    // Настройки анимации рулетки
+    const imageWidth = 150; // ширина одного изображения (в пикселях)
+    const loops = 3;        // число полных оборотов перед финалом
+
     // Массивы скинов для каждого кейса (по 5 скинов)
     const case1Skins = [
       { name: "Кейс 1 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+A" },
@@ -120,7 +163,6 @@
       { name: "Кейс 1 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+D" },
       { name: "Кейс 1 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+1+Скин+E" }
     ];
-
     const case2Skins = [
       { name: "Кейс 2 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+A" },
       { name: "Кейс 2 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+B" },
@@ -128,7 +170,6 @@
       { name: "Кейс 2 - Скин D", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+D" },
       { name: "Кейс 2 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+2+Скин+E" }
     ];
-
     const case3Skins = [
       { name: "Кейс 3 - Скин A", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+A" },
       { name: "Кейс 3 - Скин B", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+B" },
@@ -137,36 +178,83 @@
       { name: "Кейс 3 - Скин E", image: "https://via.placeholder.com/300x300.png?text=Кейс+3+Скин+E" }
     ];
 
-    // Функция для открытия кейса
-    function openCase(caseImageId, resultId, skinsArray) {
-      const caseImage = document.getElementById(caseImageId);
-      const resultElem = document.getElementById(resultId);
-      // Очищаем предыдущий результат
-      resultElem.textContent = "";
-      // Добавляем анимацию вращения
-      caseImage.classList.add("spin");
+    // Получаем элементы модального окна и рулетки
+    const rouletteModal = document.getElementById("rouletteModal");
+    const rouletteTrack = document.getElementById("rouletteTrack");
 
-      // Через 1 секунду прекращаем анимацию и выбираем скин случайным образом
-      setTimeout(() => {
-        caseImage.classList.remove("spin");
-        const randomIndex = Math.floor(Math.random() * skinsArray.length);
-        const selectedSkin = skinsArray[randomIndex];
-        caseImage.src = selectedSkin.image;
-        resultElem.textContent = "Вы получили: " + selectedSkin.name;
-      }, 1000);
+    // Функция, которая запускает анимацию открывания кейса через модальное окно
+    // skins – массив скинов для выбранного кейса
+    // mainImageId – ID изображения кейса на основной странице
+    // resultId – ID блока для вывода результата (названия скина)
+    function openCaseModal(skins, mainImageId, resultId) {
+      // Показываем модальное окно
+      rouletteModal.style.display = "flex";
+      // Очищаем содержимое рулетки
+      rouletteTrack.innerHTML = "";
+      
+      // Формируем последовательность изображений для анимации.
+      // Повторяем скины несколько раз для эффекта «крутящейся рулетки»
+      let totalSkins = [];
+      for (let l = 0; l < loops; l++) {
+        totalSkins = totalSkins.concat(skins);
+      }
+      // Добавляем ещё одну последовательность для финального выбора
+      totalSkins = totalSkins.concat(skins);
+      
+      // Заполняем рулетку изображениями
+      totalSkins.forEach(item => {
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.name;
+        rouletteTrack.appendChild(img);
+      });
+      
+      // Выбираем случайный скин из последней группы для финала
+      const finalIndex = Math.floor(Math.random() * skins.length);
+      
+      // Вычисляем целевое смещение.
+      // Количество изображений до финального результата = loops * (число скинов) + finalIndex
+      const totalImagesBefore = loops * skins.length + finalIndex;
+      const targetOffset = totalImagesBefore * imageWidth;  // в пикселях
+      
+      // Запускаем анимацию рулетки с плавным переходом
+      rouletteTrack.style.transition = "transform 3s ease-out";
+      rouletteTrack.style.transform = "translateX(-" + targetOffset + "px)";
+      
+      // После завершения анимации
+      rouletteTrack.addEventListener("transitionend", function handleTransitionEnd() {
+        // Убираем обработчик, чтобы он сработал только один раз
+        rouletteTrack.removeEventListener("transitionend", handleTransitionEnd);
+        
+        // Получаем выбранный скин
+        const selectedSkin = skins[finalIndex];
+        
+        // Обновляем изображение кейса и выводим результат
+        document.getElementById(mainImageId).src = selectedSkin.image;
+        document.getElementById(resultId).textContent = "Вы получили: " + selectedSkin.name;
+        
+        // Сбрасываем стили для следующей анимации
+        rouletteTrack.style.transition = "";
+        rouletteTrack.style.transform = "";
+        
+        // Закрываем модальное окно через 1 секунду, чтобы пользователь увидел финальное положение рулетки
+        setTimeout(() => {
+          rouletteModal.style.display = "none";
+        }, 1000);
+      });
     }
 
-    // Привязываем события клика к кнопкам каждого кейса
+    // Привязываем обработчики событий к кнопкам каждого кейса
     document.getElementById('openCase1Btn').addEventListener('click', () => {
-      openCase('case1Image', 'result1', case1Skins);
+      openCaseModal(case1Skins, 'case1Image', 'result1');
     });
 
     document.getElementById('openCase2Btn').addEventListener('click', () => {
-      openCase('case2Image', 'result2', case2Skins);
+      openCaseModal(case2Skins, 'case2Image', 'result2');
     });
 
     document.getElementById('openCase3Btn').addEventListener('click', () => {
-      openCase('case3Image', 'result3', case3Skins);
+      openCaseModal(case3Skins, 'case3Image', 'result3');
     });
   </script>
 </body>
